@@ -84,9 +84,18 @@ const SearchByArtist = () => {
     }
   };
 
-  const showTopTracks = () =>{
-
-    return ("ejemplo");
+  const showTopTracks = (id) =>{
+    let index = dataArtists.findIndex((artist) => {
+    if (artist.id === id){
+      return true;
+    }
+    });
+    let listTracks = topTracks[index];
+    let stringtrack = '';
+    listTracks.forEach(function(track){
+      stringtrack = stringtrack + ' - ' + track.name;
+    });
+    return stringtrack;
 
   };
 
