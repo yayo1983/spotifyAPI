@@ -92,6 +92,9 @@ const SearchByArtist = () => {
     });
     let listTracks = topTracks[index];
     let stringtrack = '';
+    if(listTracks.length == 0){
+      return;
+    }
     listTracks.forEach(function(track){
       stringtrack = stringtrack + ' - ' + track.name;
     });
