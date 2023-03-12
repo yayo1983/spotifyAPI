@@ -4,6 +4,7 @@ const initialState = {
   name: 'www',
   errorSearch: false,
   dataArtists: [],
+  topTracks:[],
 };
 
 const spotifySlice = createSlice({
@@ -22,6 +23,13 @@ const spotifySlice = createSlice({
     },
     setDataArtists(state, action) {
       state.dataArtists = action.payload;
+    },
+    setTopTracks(state, action) {
+     return { // returning a copy of orignal state 
+        ...state, //copying the original state
+        topTracks: [...state.topTracks, action.payload] //new todos array 
+       }
+     
     },
   },
 });

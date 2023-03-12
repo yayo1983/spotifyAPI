@@ -6,8 +6,6 @@ import { Buffer } from "buffer";
 const ClientId = process.env.REACT_APP_CLIENT_ID; // client id
 const ClientSecret = process.env.REACT_APP_CLIENT_SECRET; // secret
 
-console.log(ClientId);
-
 const Auth = async () => {
   let data = { grant_type: "client_credentials" };
   return await axios.post("https://accounts.spotify.com/api/token", data, {
@@ -37,7 +35,6 @@ export const get = async (url, data = null) => {
       headers: { Authorization: "Bearer " + token },
     });
   } catch (error) {
-    console.log(error);
     return false;
   }
 };
@@ -53,7 +50,6 @@ export const post = async (url, data) => {
       },
     });
   } catch (error) {
-    console.log(error);
     return false;
   }
 };

@@ -1,5 +1,5 @@
 import { get } from "../common";
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { Toast } from "primereact/toast";
 import { Panel } from "primereact/panel";
 import { Button } from "primereact/button";
@@ -15,7 +15,7 @@ const SearchByArtist = () => {
   const dispatch = useDispatch();
   const name = useSelector((state) => state.spotifyr.name);
   const dataArtists = useSelector((state) => state.spotifyr.dataArtists);
-  const [tracks, setTracks] = useState([]);
+  const topTracks = useSelector((state) => state.spotifyr.topTracks);
   const errorSearch = useSelector((state) => state.spotifyr.errorSearch);
 
   const setName = (value) => {
@@ -47,13 +47,15 @@ const SearchByArtist = () => {
           type: "artist",
         };
         let response = await get("search", data);
-        if (response.status != 200) {          
+        if (response.status !== 200) {          
           showToast("error", "Error", response.message);
         } else {
-          console.log();  
           dispatch(spotifyActions.clearForm());
           dispatch(spotifyActions.setDataArtists(response.data.artists.items));
           showToast("success", "Success", "Búsqueda satisfactoria");
+          response.data.artists.items.forEach(function(artist){
+            getTopTracks(artist.id);
+          });
         }
       } else {
         dispatch(spotifyActions.setErrorName(true));
@@ -68,42 +70,24 @@ const SearchByArtist = () => {
     }
   };
 
-  const getArtists = async (id) => {
+  const getTopTracks = async (id_artist) => {
     try {
-      dispatch(spotifyActions.setErrorName(false));
-      let response = await get("artists/"+id);
-      response = JSON.stringify(response);
-      if (response.status != 200) {
-        showToast("error", "Error", response.message);
-      } else {
-        setTracks(response.data);
-      }
+      let data = { 'market': 'ES' };
+      let response = await get("artists/" + id_artist + "/top-tracks", data);
+      if (response.status !== 200) {
+        return false ;
+      } 
+      
+      dispatch(spotifyActions.setTopTracks(response.data.tracks));
     } catch (error) {
-      showToast(
-        "error",
-        "Error",
-        "Error en la búsqueda por el nombre del artista"
-      );
+      dispatch(spotifyActions.setTopTracks(topTracks.concat(), []));
     }
   };
 
-  const getTracks = async (discography_id) => {
-    try {
-      dispatch(spotifyActions.setErrorName(false));
-      let response = await get("albums/" + discography_id + "/tracks'");
-      response = JSON.stringify(response);
-      if (response.status != 200) {
-        showToast("error", "Error", response.message);
-      } else {
-        setTracks(response.data);
-      }
-    } catch (error) {
-      showToast(
-        "error",
-        "Error",
-        "Error en la búsqueda por el nombre del artista"
-      );
-    }
+  const showTopTracks = () =>{
+
+    return ("ejemplo");
+
   };
 
   let classErrorSearch = errorSearch ? "p-invalid mr-2" : "";
@@ -176,6 +160,15 @@ const SearchByArtist = () => {
               body={(artist) =>
                 artist.followers != null
                   ? artist.followers.total
+                  : ""
+              }
+            ></Column>
+            <Column
+              field="id"
+              header="Los mejores temas"
+              body={(artist) =>
+                artist.id != null
+                  ? showTopTracks(artist.id)
                   : ""
               }
             ></Column>
