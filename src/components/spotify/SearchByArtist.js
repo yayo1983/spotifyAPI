@@ -88,11 +88,10 @@ const SearchByArtist = () => {
     let index = dataArtists.findIndex((artist) => {
     if (artist.id === id){
       return true;
-    }
-    });
+    }});
     let listTracks = topTracks[index];
     let stringtrack = '';
-    if(listTracks.length == 0){
+    if( !listTracks || listTracks.length == 0){
       return;
     }
     listTracks.forEach(function(track){
