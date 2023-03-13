@@ -1,4 +1,3 @@
-import { get } from "../common";
 import React, { useRef } from "react";
 import { Toast } from "primereact/toast";
 import { Panel } from "primereact/panel";
@@ -9,6 +8,8 @@ import { DataTable } from "primereact/datatable";
 import { InputText } from "primereact/inputtext";
 import { spotifyActions } from "../../store/spotify";
 import { useSelector, useDispatch } from "react-redux";
+import { searchArtistAction } from '../../store/spotify-actions';
+
 
 const SearchByArtist = () => {
   const toast = useRef(null);
@@ -38,49 +39,18 @@ const SearchByArtist = () => {
     return true;
   };
 
-  const searchArtist = async () => {
-    try {
-      dispatch(spotifyActions.setErrorName(false));
-      if (validateNameInput()) {
-        let data = {
-          q: name,
-          type: "artist",
-        };
-        let response = await get("search", data);
-        if (response.status !== 200) {          
-          showToast("error", "Error", response.message);
-        } else {
-          dispatch(spotifyActions.clearForm());
-          dispatch(spotifyActions.setDataArtists(response.data.artists.items));
-          showToast("success", "Success", "Búsqueda satisfactoria");
-          response.data.artists.items.forEach(function(artist){
-            getTopTracks(artist.id);
-          });
-        }
-      } else {
-        dispatch(spotifyActions.setErrorName(true));
-        showToast("error", "Error", "El nombre del artista esta incorrecto");
+  const searchArtist = () => {
+    if(validateNameInput()){
+      let result = dispatch(searchArtistAction(name));
+      if (result){
+        showToast("success", "Success", "Búsqueda satisfactoria");
+      }else{
+        showToast(
+          "error",
+          "Error",
+          "Error en la búsqueda por el nombre del artista"
+        );
       }
-    } catch (error) {
-      showToast(
-        "error",
-        "Error",
-        "Error en la búsqueda por el nombre del artista"
-      );
-    }
-  };
-
-  const getTopTracks = async (id_artist) => {
-    try {
-      let data = { 'market': 'ES' };
-      let response = await get("artists/" + id_artist + "/top-tracks", data);
-      if (response.status !== 200) {
-        return false ;
-      } 
-      
-      dispatch(spotifyActions.setTopTracks(response.data.tracks));
-    } catch (error) {
-      dispatch(spotifyActions.setTopTracks(topTracks.concat(), []));
     }
   };
 
