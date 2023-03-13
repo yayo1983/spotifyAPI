@@ -5,6 +5,7 @@ const initialState = {
   errorSearch: false,
   dataArtists: [],
   topTracks:[],
+  newReleases:[],
 };
 
 const spotifySlice = createSlice({
@@ -29,8 +30,10 @@ const spotifySlice = createSlice({
         ...state, //copying the original state
         topTracks: [...state.topTracks, action.payload] //new todos array 
        }
-     
     },
+    setNewReleases(state, action) {
+      state.newReleases = action.payload;
+     },
   },
 });
 export const spotifyActions = spotifySlice.actions;

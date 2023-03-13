@@ -1,12 +1,16 @@
 import { get, formatD } from "../common";
 import { Toast } from "primereact/toast";
 import { Column } from "primereact/column";
+import React, { useEffect, useRef } from "react";
 import { DataTable } from "primereact/datatable";
-import React, { useState, useEffect, useRef } from "react";
+import { spotifyActions } from "../../store/spotify";
+import { useSelector, useDispatch } from "react-redux";
+
 
 const NewReleases = () => {
   const toast = useRef(null);
-  const [newReleases, setNewReleases] = useState([]);
+  const dispatch = useDispatch();
+  const newReleases = useSelector((state) => state.spotifyr.newReleases);
 
   const showToast = (severity, summary, detail) => {
     toast.current.show({
@@ -23,10 +27,11 @@ const NewReleases = () => {
       if (response.status !== 200) {
         showToast("error", "Error", "Error en la petición de los datos");
       } else {
-        setNewReleases(response.data.albums.items);
+        dispatch(spotifyActions.setNewReleases(response.data.albums.items));
       }
     } catch (error) {
-      setNewReleases([]);
+      dispatch(spotifyActions.setNewReleases([]));
+     
       showToast("error", "Error", "Error en la petición de los datos");
     }
   };
@@ -49,7 +54,6 @@ const NewReleases = () => {
 
   useEffect(() => {
     getNewReleases();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
