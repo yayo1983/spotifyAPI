@@ -1,14 +1,19 @@
+import { get } from "../components/common";
 
-const getNewReleases = async () => {
+import { spotifyActions } from "./spotify";
+
+export const getNewReleasesAction = () => {
+  return async (dispatch) => {
     try {
       let response = await get("browse/new-releases");
       if (response.status !== 200) {
-        showToast("error", "Error", "Error en la petición de los datos");
-      } else {
-        setNewReleases(response.data.albums.items);
+        return false;
       }
+      dispatch(spotifyActions.setNewReleases(response.data.albums.items));
+      return true;
     } catch (error) {
-      setNewReleases([]);
-      showToast("error", "Error", "Error en la petición de los datos");
+      dispatch(spotifyActions.setNewReleases([]));
+      return false;
     }
   };
+};

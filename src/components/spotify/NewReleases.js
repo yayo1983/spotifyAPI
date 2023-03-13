@@ -1,11 +1,10 @@
-import { get, formatD } from "../common";
+import { formatD } from "../common";
 import { Toast } from "primereact/toast";
 import { Column } from "primereact/column";
 import React, { useEffect, useRef } from "react";
 import { DataTable } from "primereact/datatable";
-import { spotifyActions } from "../../store/spotify";
 import { useSelector, useDispatch } from "react-redux";
-
+import { getNewReleasesAction } from '../../store/spotify-actions';
 
 const NewReleases = () => {
   const toast = useRef(null);
@@ -22,18 +21,10 @@ const NewReleases = () => {
   };
 
   const getNewReleases = async () => {
-    try {
-      let response = await get("browse/new-releases");
-      if (response.status !== 200) {
+      let result = dispatch(getNewReleasesAction());
+      if(!result){
         showToast("error", "Error", "Error en la petición de los datos");
-      } else {
-        dispatch(spotifyActions.setNewReleases(response.data.albums.items));
       }
-    } catch (error) {
-      dispatch(spotifyActions.setNewReleases([]));
-     
-      showToast("error", "Error", "Error en la petición de los datos");
-    }
   };
 
   const ToStringArtists = (listArtists) =>{
