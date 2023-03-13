@@ -33,7 +33,11 @@ const SearchByArtist = () => {
   };
 
   const validateNameInput = () => {
-    if (name === null || name === "") {
+    //se chequea con el regex que solo tenga caracteres alfanumeros
+    let char_alpha = /^[0-9a-zA-Z]+$/;
+    //se chequea con el regex que no comience por números
+    let numero_init = /^\d/;
+    if (name === null || name === "" || numero_init.test(name) || !char_alpha.test(name) ) {
       return false;
     }
     return true;
@@ -51,6 +55,14 @@ const SearchByArtist = () => {
           "Error en la búsqueda por el nombre del artista"
         );
       }
+    }
+    else {
+      dispatch(spotifyActions.setErrorName(true));
+      showToast(
+        "error",
+        "Error",
+        "Error en la búsqueda por el nombre del artista"
+      );
     }
   };
 
