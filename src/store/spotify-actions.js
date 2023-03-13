@@ -37,7 +37,6 @@ export const searchArtistAction = (name) => {
       });
       return true;
     } catch (error) {
-      dispatch(spotifyActions.setErrorName(true));
       return false;
     }
   };
