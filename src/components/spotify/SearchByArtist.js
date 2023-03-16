@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import { showToast } from "../common";
 import { Toast } from "primereact/toast";
 import { Panel } from "primereact/panel";
 import { Button } from "primereact/button";
@@ -23,15 +24,6 @@ const SearchByArtist = () => {
     dispatch(spotifyActions.setName(value));
   };
 
-  const showToast = (severity, summary, detail) => {
-    toast.current.show({
-      severity: severity,
-      summary: summary,
-      detail: detail,
-      life: 3000,
-    });
-  };
-
   const validateNameInput = () => {
     //se chequea con el regex que solo tenga caracteres alfanumeros
     let char_alpha = /^[0-9a-zA-Z]+$/;
@@ -47,12 +39,13 @@ const SearchByArtist = () => {
     if(validateNameInput()){
       let result = dispatch(searchArtistAction(name));
       if (result){
-        showToast("success", "Success", "Búsqueda satisfactoria");
+        showToast("success", "Success", "Búsqueda satisfactoria", toast);
       }else{
         showToast(
           "error",
           "Error",
-          "Error en la búsqueda por el nombre del artista"
+          "Error en la búsqueda por el nombre del artista",
+          toast
         );
       }
     }
@@ -61,7 +54,8 @@ const SearchByArtist = () => {
       showToast(
         "error",
         "Error",
-        "Error en la búsqueda por el nombre del artista"
+        "Error en la búsqueda por el nombre del artista",
+        toast
       );
     }
   };

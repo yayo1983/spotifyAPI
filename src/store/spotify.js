@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  name: 'www',
+  name: '',
   errorSearch: false,
   dataArtists: [],
   topTracks:[],

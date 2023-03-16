@@ -53,3 +53,13 @@ export const post = async (url, data) => {
     return false;
   }
 };
+
+
+export const showToast = (severity, summary, detail, toast) => {
+  toast.current.show({
+    severity: severity,
+    summary: summary,
+    detail: detail,
+    life: 3000,
+  });
+};

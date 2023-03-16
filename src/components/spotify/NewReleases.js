@@ -1,4 +1,4 @@
-import { formatD } from "../common";
+import { formatD, showToast } from "../common";
 import { Toast } from "primereact/toast";
 import { Column } from "primereact/column";
 import React, { useEffect, useRef } from "react";
@@ -11,19 +11,10 @@ const NewReleases = () => {
   const dispatch = useDispatch();
   const newReleases = useSelector((state) => state.spotifyr.newReleases);
 
-  const showToast = (severity, summary, detail) => {
-    toast.current.show({
-      severity: severity,
-      summary: summary,
-      detail: detail,
-      life: 3000,
-    });
-  };
-
   const getNewReleases = async () => {
       let result = dispatch(getNewReleasesAction());
       if(!result){
-        showToast("error", "Error", "Error en la petición de los datos");
+        showToast("error", "Error", "Error en la petición de los datos", toast);
       }
   };
 
