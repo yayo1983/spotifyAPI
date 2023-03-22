@@ -1,5 +1,13 @@
-const useNewReleases = () =>{
-    
-}
+import { useDispatch } from "react-redux";
+import { getNewReleasesAction } from '../store/spotify-actions';
 
-export default useNewReleases;
+const useHasNewRelease = () => {
+    const dispatch = useDispatch();
+    let result = dispatch(getNewReleasesAction());
+    if(!result){
+      return false;
+    }
+    return true;
+};
+
+export default useHasNewRelease;

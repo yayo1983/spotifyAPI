@@ -3,16 +3,16 @@ import { Toast } from "primereact/toast";
 import { Column } from "primereact/column";
 import React, { useEffect, useRef } from "react";
 import { DataTable } from "primereact/datatable";
-import { useSelector, useDispatch } from "react-redux";
-import { getNewReleasesAction } from '../../store/spotify-actions';
+import { useSelector } from "react-redux";
+import useHasNewRelease from '../../hooks/use-new-releases'
 
 const NewReleases = () => {
   const toast = useRef(null);
-  const dispatch = useDispatch();
   const newReleases = useSelector((state) => state.spotifyr.newReleases);
+  const hasNewRelease = useHasNewRelease(); 
 
   const getNewReleases = async () => {
-      let result = dispatch(getNewReleasesAction());
+      let result = hasNewRelease;
       if(!result){
         showToast("error", "Error", "Error en la petición de los datos", toast);
       }
